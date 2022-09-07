@@ -13,7 +13,7 @@ function App() {
   }
   
   const [questions, setQuestions] = useState([])
-
+  
   useEffect(() => {
       async function getQuestions(){
           const res = await fetch(`https://opentdb.com/api.php?amount=5&difficulty=easy`)
@@ -23,27 +23,6 @@ function App() {
       getQuestions()
   }, [])
 
-  // const correctAnswers = questions.map(ans => {
-  //   return he.decode( ans.correct_answer)
-  // })
-
-  const quiz = questions.map(question => {
-    
-    const array = [question.correct_answer].concat(question.incorrect_answers)
-    //copied shuffle code
-    const shuffled = array
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value)
-    
-    return <Quiz
-            key={nanoid()}
-            id={nanoid()}
-            question={question.question}
-            answers={shuffled}
-          />
-  })
-
   function checkResult(){
     // const ll = playerAnswers.length < 5 || playerAnswers.length > 5 ? "incomplete" : correctAnswers.filter(correctAnswer => {
     //   return playerAnswers.includes(correctAnswer)
@@ -51,10 +30,25 @@ function App() {
     // console.log(ll)
   }
 
+  const options = questions.map(question => {
+    const array = [question.correct_answer].concat(question.incorrect_answers)
+    //copied shuffle code
+    const shuffled = array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+    return shuffled
+  })
+
   return (
     <>
       { start && <Onboard handleClick={startQuiz}/>}
-      {quiz}
+      <Quiz
+            key={nanoid()}
+            id={nanoid()}
+            question={questions}
+            answerOptions={options}
+      />
       <button
         onClick={checkResult}
         className='check'>Check Answer</button>

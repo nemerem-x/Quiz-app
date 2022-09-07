@@ -1,0 +1,39 @@
+import React from "react"
+import { nanoid } from 'nanoid'
+import he from 'he'
+import { useState } from "react"
+
+export default function Quiz({question, answers, handleClick, correctAnswer}){
+
+    const answerOptions = answers.map(answer => {
+        const [toggle, setToggle] = useState(false)
+        return <button 
+                className={`answerBtn ${toggle ? "clicked" : ""}`}
+                key={nanoid()}
+                id={nanoid()}
+                onClick={() => handleClick(he.decode(question), he.decode(answer), he.decode(correctAnswer))}
+                value={he.decode(answer)}
+                >{he.decode(answer)}</button>
+    })
+
+    // const result = answers.map(answer => {
+    //     const [toggle, setToggle] = useState(false)
+    //     return <button 
+    //             className={`answerBtn ${toggle ? "correct" : "wrong"}`}
+    //             key={nanoid()}
+    //             id={nanoid()}
+    //             value={he.decode(answer)}
+    //             >{he.decode(answer)}</button>
+    // })
+
+    return (
+        <>
+            <div className="quizQuestions">
+                <h2>{he.decode(question)}</h2>
+                <div className="answers">
+                    {answerOptions}
+                </div>
+            </div>
+        </>
+    )
+}
