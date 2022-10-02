@@ -6,6 +6,7 @@ import Onboard from '../components/Onboard'
 
 function App() {
 
+  const [play, setPlay] = useState(false)
   const [start, setStart] = useState(true)
 
   function startQuiz(){
@@ -21,14 +22,7 @@ function App() {
           setQuestions(data.results)
       }
       getQuestions()
-  }, [])
-
-  function checkResult(){
-    // const ll = playerAnswers.length < 5 || playerAnswers.length > 5 ? "incomplete" : correctAnswers.filter(correctAnswer => {
-    //   return playerAnswers.includes(correctAnswer)
-    // })
-    // console.log(ll)
-  }
+  }, [play])
 
   const options = questions.map(question => {
     const array = [question.correct_answer].concat(question.incorrect_answers)
@@ -40,6 +34,10 @@ function App() {
     return shuffled
   })
 
+  function playAgain(){
+    setPlay(prevState => !prevState)
+  }
+
   return (
     <>
       { start && <Onboard handleClick={startQuiz}/>}
@@ -48,10 +46,8 @@ function App() {
             id={nanoid()}
             question={questions}
             answerOptions={options}
+            handleClick={playAgain}
       />
-      <button
-        onClick={checkResult}
-        className='check'>Check Answer</button>
     </>
   )
 }

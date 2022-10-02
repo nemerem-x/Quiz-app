@@ -87,13 +87,27 @@ gap: 10px;
   border: none;
 }
 
-.answerBtn.correct{
+.resultBtn.correct{
   background-color: #94D7A2;
   border: none;
+  opacity: 1;
 }
 
-.answerBtn.wrong{
+.resultBtn.wrong{
   background-color: #F8BCBC;
+}
+
+.resultBtn{
+  opacity: 0.5;
+  border: 1px solid #293264;
+  background-color: none;
+  background: none;
+  border-radius: 12px;
+  color: #293264;
+  padding: 5px 20px;
+  font-size: 1rem;
+  font-weight: 400;
+  width: auto;
 }
 
 .answerBtn{
@@ -112,3 +126,24 @@ gap: 10px;
 .answerBtn:hover{
   background-color: #D6DBF5;
 }
+
+.playagain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.playagain p {
+  margin: 0;
+}
+
+.play {
+  cursor: pointer;
+  border-radius: 12px;
+  border: none;
+  background-color: #293264;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  }

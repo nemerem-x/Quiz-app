@@ -1,0 +1,54 @@
+import React from "react"
+import { nanoid } from 'nanoid'
+import he from 'he'
+import { useState } from "react"
+import { useEffect } from "react"
+
+
+export default function Quiz({question, answers, handleClick, correctAnswer, select, done, pickedAnswer}){
+
+    const answerOptions = answers.map(answer => {
+        return <button 
+                className={`answerBtn ${select === answers ? "clicked" : ""}`}
+                key={nanoid()}
+                onClick={() => handleClick(he.decode(question), he.decode(answer), he.decode(correctAnswer))}
+                value={he.decode(answer)}
+                >{he.decode(answer)}</button>
+    })
+
+    const result = answers.map(answer => {
+        
+        const [toggle, setToggle] = useState(false)
+
+        useEffect(() =>{
+            function runCheck(){
+                if (pickedAnswer.length == 0){
+                    return ''
+                } else if(pickedAnswer[0].answer !== pickedAnswer[0].correctAnswer){
+                    setButtonResult("wrong")
+                } else if(pickedAnswer[0].answer === pickedAnswer[0].correctAnswer) {
+                    setButtonResult(pickedAnswer[0].answer)
+                    }
+            }
+            runCheck()
+        },[pickedAnswer])
+
+        return <button 
+                className={`answerBtn ${clicked ? "correct" : "wrong"}`}
+                key={nanoid()}
+                id={nanoid()}
+                value={he.decode(answer)}
+                >{he.decode(answer)}</button>
+    })
+
+    return (
+        <>
+            <div className="quizQuestions">
+                <h2>{he.decode(question)}</h2>
+                <div className="answers">
+                    {done ? result : answerOptions}
+                </div>
+            </div>
+        </>
+    )
+}

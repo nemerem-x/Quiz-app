@@ -1,0 +1,86 @@
+import { useState, useEffect } from 'react'
+import { nanoid } from 'nanoid'
+import './App.css'
+import Quiz from '../components/Quiz'
+import Onboard from '../components/Onboard'
+
+function App() {
+
+  const [start, setStart] = useState(true)
+  const [check, setCheck] = useState(false)
+
+  function startQuiz(){
+    setStart(prevStart => !prevStart)
+  }
+  
+  const [questions, setQuestions] = useState([])
+  
+  useEffect(() => {
+      async function getQuestions(){
+          const res = await fetch(`https://opentdb.com/api.php?amount=5&difficulty=easy`)
+          const data = await res.json()
+          setQuestions(data.results)
+      }
+      getQuestions()
+  }, [])
+  
+  const quiz = questions.map(question => {
+
+    const [selectedAnswers, setSelectedAnswers] = useState([])
+    const [clicked, setClicked] = useState(false)
+
+      
+    const array = [question.correct_answer].concat(question.incorrect_answers)
+    //copied shuffle code
+    const shuffled = array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+    
+    function selectAnswer(question, selectedAnswer, correctAnswer){
+      setSelectedAnswers(
+          selectedAnswers.length
+          ?
+          selectedAnswers.map(item => {
+              if(item.question === question){
+                  return {...item, selectedAnswer: selectedAnswer}
+              }
+              return item
+          })
+          :
+          [{question, selectedAnswer, correctAnswer}]
+      )
+
+      setClicked(selectedAnswer)
+    }
+
+    console.log(selectedAnswers)
+
+    return <Quiz
+            key={nanoid()}
+            handleClick={() => selectAnswer(question, selectedAnswer, correctAnswer)}
+            question={question.question}
+            answers={shuffled}
+            select={clicked}
+            done={check}
+            pickedAnswer={selectedAnswers}
+            correctAnswer={question.correct_answer}
+          />
+  })
+
+  function checkResult(){
+    setCheck(prevState => !prevState)
+  }
+
+  return (
+    <>
+      { start && <Onboard handleClick={startQuiz}/>}
+      {quiz}
+      <button
+        onClick={checkResult}
+        className='check'>Check Answer</button>
+    </>
+  )
+}
+
+export default App
