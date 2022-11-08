@@ -39,7 +39,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="container">
       { start && <Onboard handleClick={startQuiz}/>}
       <Quiz
             key={nanoid()}
@@ -48,7 +48,8 @@ function App() {
             answerOptions={options}
             handleClick={playAgain}
       />
-    </>
+
+    </div>
   )
 }
 
